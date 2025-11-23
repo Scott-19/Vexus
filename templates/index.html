@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Vexus Chatbot</title>
+    <style>
+        body { font-family: Arial; max-width: 800px; margin: 0 auto; padding: 20px; }
+        .chat-container { border: 1px solid #ddd; padding: 20px; height: 400px; overflow-y: auto; }
+        .input-container { margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <h1>🤖 Vexus Chatbot</h1>
+    <div class="chat-container" id="chat"></div>
+    <div class="input-container">
+        <input type="text" id="message" placeholder="Digite sua mensagem..." style="width: 70%;">
+        <button onclick="sendMessage()">Enviar</button>
+    </div>
+
+    <script>
+        async function sendMessage() {
+            const message = document.getElementById('message').value;
+            if (!message) return;
+            
+            addMessage('user', message);
+            document.getElementById('message').value = '';
+            
+            const response = await fetch('/api/chat', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({message: message})
+            });
+            
+            const data = await response.json();
+            addMessage('vexus', data.response);
+        }
+        
+        function addMessage(sender, text) {
+            const chat = document.getElementById('chat');
+            const msg = document.createElement('div');
+            msg.innerHTML = `<strong>${sender}:</strong> ${text}`;
+            chat.appendChild(msg);
+            chat.scrollTop = chat.scrollHeight;
+        }
+    </script>
+</body>
+      </html>
