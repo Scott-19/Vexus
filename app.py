@@ -23,6 +23,16 @@ def health():
         "capabilities": ["deepseek_integration"]
     })
 
+@app.route('/debug')
+def debug():
+    from config import config
+    return jsonify({
+        "api_key_exists": bool(config.DEEPSEEK_API_KEY),
+        "api_key_length": len(config.DEEPSEEK_API_KEY) if config.DEEPSEEK_API_KEY else 0,
+        "api_key_prefix": config.DEEPSEEK_API_KEY[:10] + "..." if config.DEEPSEEK_API_KEY else "None",
+        "status": "DEBUG ACTIVE"
+    })
+```
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 10000))
     app.run(host='0.0.0.0', port=port)
